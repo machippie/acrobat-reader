@@ -1,0 +1,16 @@
+# Standards: 0.1
+---
+- name: Kill acrobat-reader
+  command: killall AdobeReader
+  register: acrobat_reader_kill
+  failed_when: acrobat_reader_kill.rc != 0 and "No matching processes belonging to you were found" not in acrobat_reader_kill.stderr
+  become: "{{ (acrobat_reader_user != ansible_user_id) | bool }}"
+  become_user: "{{ acrobat_reader_user }}"
+
+- name: Start acrobat-reader
+  when: acrobat_reader_started
+  command: open -g /Applications/Adobe\ Acrobat\ Reader\ DC.app
+  become: "{{ (acrobat_reader_user != ansible_user_id) | bool }}"
+  become_user: "{{ acrobat_reader_user }}"
+
+...

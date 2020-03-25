@@ -1,0 +1,10 @@
+# Standards: 0.1
+---
+# @var acrobat_reader_user:description: User to run user-specific commands
+# @var acrobat_reader_user:value: acrobat_reader_user | default(homebrew_user) | default(ansible_user_id)
+# acrobat_reader_user:
+
+# @var acrobat_reader_started:description: Start in background after install
+acrobat_reader_started: True
+
+...

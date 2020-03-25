@@ -1,0 +1,31 @@
+# Standards: 0.1
+---
+- name: Fact acrobat-reader user
+  set_fact:
+    acrobat_reader_user: "{{ acrobat_reader_user | default(homebrew_user) | default(ansible_user_id) }}"
+  tags:
+    - acrobat-reader
+
+- become: "{{ (acrobat_reader_user != ansible_user_id) | bool }}"
+  become_user: "{{ acrobat_reader_user }}"
+  block:
+    - name: Install required package
+      ignore_errors: True
+      homebrew_cask:
+        name: adobe-acrobat-reader
+        greedy: True
+        options: appdir=/Applications
+        accept_external_apps: False
+        state: upgraded
+      tags:
+        - acrobat-reader
+
+- name: Remove quarantine flag
+  register: acrobat-reader_quarantine
+  failed_when: acrobat_reader_quarantine.rc != 0 and "No such xattr" not in acrobat_reader_quarantine.stderr
+  changed_when: acrobat_reader_quarantine.rc == 0
+  command: xattr -d com.apple.quarantine /Applications/Adobe\ Acrobat\ Reader\ DC.app
+  tags:
+    - acrobat-reader
+
+...
