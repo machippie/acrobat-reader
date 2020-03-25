@@ -21,7 +21,7 @@
         - acrobat-reader
 
 - name: Remove quarantine flag
-  register: acrobat-reader_quarantine
+  register: acrobat_reader_quarantine
   failed_when: acrobat_reader_quarantine.rc != 0 and "No such xattr" not in acrobat_reader_quarantine.stderr
   changed_when: acrobat_reader_quarantine.rc == 0
   command: xattr -d com.apple.quarantine /Applications/Adobe\ Acrobat\ Reader\ DC.app
